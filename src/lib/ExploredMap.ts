@@ -13,6 +13,10 @@ import {
   Sizable,
 } from './Assemblies';
 
+export interface BoxG extends Box {
+  explored?: boolean;
+}
+
 export function setBoxValue(
   exploredMap: ExploredMap,
   point: Point | RelativePoint,
@@ -126,21 +130,22 @@ export function exploredMapToMaze(
     return [
       ...arr,
       row.reduce((newRow: Row, val, x) => {
-        const ax = x + offset.dx;
-        const ay = y + offset.dy;
+        const ax = x + offset.dx - 1;
+        const ay = y + offset.dy - 1;
 
-        const box: Box =
-          val && pointInBorders({ x: ax, y: ay }, borders, true)
-            ? originalMaze[ay][ax]
-            : {
-                bottom: false,
-                left: false,
-                right: false,
-                set: 0,
-                top: false,
-                x: ax,
-                y: ay
-              };
+        const box: BoxG = !pointInBorders({ x: ax, y: ay }, borders, true)
+          ? {
+              bottom: false,
+              left: false,
+              right: false,
+              set: 0,
+              top: false,
+              x: ax,
+              y: ay
+            }
+          : val
+          ? { ...originalMaze[ay][ax], explored: true }
+          : { ...originalMaze[ay][ax], explored: false };
         return [...newRow, box];
       }, [])
     ];

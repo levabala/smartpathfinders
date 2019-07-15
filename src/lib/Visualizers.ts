@@ -1,7 +1,7 @@
-import { Box, Maze, Row } from 'generate-maze-ts';
+import { Maze, Row } from 'generate-maze-ts';
 
 import { Point } from './Assemblies';
-import { ExploredMap } from './ExploredMap';
+import { BoxG, ExploredMap } from './ExploredMap';
 
 export function exploredMapToStrings(exploredMap: ExploredMap): string[] {
   return exploredMap.reduce((arr: string[], row) => {
@@ -29,7 +29,7 @@ export function mazeToStrings(
   const positionEntries = Object.entries(positions);
 
   function stringifyBox(
-    box: Box
+    box: BoxG
   ): { top: string; middle: string; bottom: string } {
     const finderIsHere = !!positionEntries.find(
       ([_, { x, y }]) => x === box.x && y === box.y
@@ -37,9 +37,9 @@ export function mazeToStrings(
 
     return {
       bottom: `+${box.bottom ? '---' : '   '}+`,
-      middle: `${box.left ? '|' : ' '} ${finderIsHere ? '●' : ' '} ${
-        box.right ? '|' : ' '
-      }`,
+      middle: `${box.left ? '|' : ' '} ${
+        finderIsHere || box.explored ? '●' : ' '
+      } ${box.right ? '|' : ' '}`,
       top: `+${box.top ? '---' : '   '}+`
     };
   }

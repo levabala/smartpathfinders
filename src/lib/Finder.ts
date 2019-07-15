@@ -12,8 +12,8 @@ export function createFinder({ id }: { id: number }): Finder {
   return {
     exploredMap: generateExploredMap(),
     exploredMapOffset: {
-      dx: 0,
-      dy: 0
+      dx: -1,
+      dy: -1
     },
     id,
     relativePosition: {
@@ -24,5 +24,5 @@ export function createFinder({ id }: { id: number }): Finder {
 }
 
 function generateExploredMap(): ExploredMap {
-  return [[true]];
+  return [[false, false, false], [false, true, false], [false, false, false]];
 }
