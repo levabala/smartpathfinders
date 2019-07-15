@@ -1703,10 +1703,10 @@ function-bind@^1.0.2, function-bind@^1.1.1:
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
-generate-maze-ts@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/generate-maze-ts/-/generate-maze-ts-1.0.0.tgz#1c89b0b50fcbf8eb57fdb98d9b0b24769d64baac"
-  integrity sha512-+au6E69LBe+bvrBXd27829Qx34K7FAhl45aaH4tgnCSHIzp7bk3M7T6DlgVZ5IsDwaA9nQJG24hJ2siuE0ldzQ==
+generate-maze-ts@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/generate-maze-ts/-/generate-maze-ts-1.0.6.tgz#80a02f6f3503e5630f390b7f62771534d1835bac"
+  integrity sha512-gwx6DA7CtQh0GC01gwAZsanwmTNk2UhmVe+56UAmt1jgO/R/qowunzraYgMLAeX9VVadiEyDbZd5lVRncWjwpw==
   dependencies:
     lodash "^4.17.14"
 

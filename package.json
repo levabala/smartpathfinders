@@ -10,6 +10,7 @@
   "keywords": [],
   "scripts": {
     "publish": "./commit.sh && git push --follow-tags origin master && yarn publish",
+    "linkLibs": "yarn link generate-maze-ts",
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
     "build:main": "tsc -p tsconfig.json",
@@ -52,7 +53,7 @@
     "node": ">=8.9"
   },
   "dependencies": {
-    "generate-maze-ts": "^1.0.0"
+    "generate-maze-ts": "^1.0.6"
   },
   "devDependencies": {
     "@bitjson/npm-scripts-info": "^1.0.0",
