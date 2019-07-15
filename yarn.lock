@@ -1703,6 +1703,13 @@ function-bind@^1.0.2, function-bind@^1.1.1:
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
   integrity sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==
 
+generate-maze-ts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/generate-maze-ts/-/generate-maze-ts-1.0.0.tgz#1c89b0b50fcbf8eb57fdb98d9b0b24769d64baac"
+  integrity sha512-+au6E69LBe+bvrBXd27829Qx34K7FAhl45aaH4tgnCSHIzp7bk3M7T6DlgVZ5IsDwaA9nQJG24hJ2siuE0ldzQ==
+  dependencies:
+    lodash "^4.17.14"
+
 get-caller-file@^2.0.1:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"

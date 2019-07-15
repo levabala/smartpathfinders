@@ -13,8 +13,9 @@
     "typedef": [true, "call-signature"],
 
     // Immutability rules
-    "readonly-keyword": true,
-    "readonly-array": true,
+    // "readonly-keyword": true,
+    // "readonly-array": true,
+    "no-array-mutation": true,
     "no-let": true,
     "no-object-mutation": true,
     "no-delete": true,
@@ -28,7 +29,9 @@
       true,
       { "ignore-prefix": ["console.", "process.exit"] }
     ],
-    "no-if-statement": true
+    "no-if-statement": true,
     /* end tslint-immutable rules */
+
+    "no-console": false
   }
 }
