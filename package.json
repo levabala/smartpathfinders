@@ -1,6 +1,6 @@
 {
   "name": "smartpathfinders",
-  "version": "1.0.10",
+  "version": "1.0.12",
   "description": "nothing",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
@@ -9,7 +9,6 @@
   "license": "MIT",
   "keywords": [],
   "scripts": {
-    "publish": "./commit.sh && git push --follow-tags origin master && yarn publish",
     "linkLibs": "yarn link generate-maze-ts",
     "describe": "npm-scripts-info",
     "build": "run-s clean && run-p build:*",
