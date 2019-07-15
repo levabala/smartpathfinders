@@ -1,6 +1,6 @@
 {
   "name": "smartpathfinders",
-  "version": "1.0.12",
+  "version": "1.0.14",
   "description": "nothing",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",

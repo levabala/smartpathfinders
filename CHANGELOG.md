@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.14](https://github.com/levabala/smartpathfinders/compare/v1.0.12...v1.0.14) (2019-07-15)
+
+
+
 ### [1.0.12](https://github.com/levabala/smartpathfinders/compare/v1.0.10...v1.0.12) (2019-07-15)
 
 
