@@ -11,7 +11,10 @@ import {
   RelativePoint,
   rp2p,
   Sizable,
+  sumPoints,
 } from './Assemblies';
+import { Finder } from './Finder';
+import { Room } from './Room';
 
 export interface BoxG extends Box {
   explored?: boolean;
@@ -112,6 +115,30 @@ export function toRelative(
     }),
     size
   ) as ExploredMapRelative;
+}
+
+export function getMazeBoxByFinder(
+  finder: Finder,
+  relativePoint: RelativePoint,
+  room: Room
+): Box {
+  const absPosition = relativePointToAbsoluteByFinder(
+    finder,
+    room,
+    relativePoint
+  );
+  return room.maze[absPosition.y][absPosition.x];
+}
+
+export function relativePointToAbsoluteByFinder(
+  finder: Finder,
+  room: Room,
+  relativePoint: RelativePoint = { rx: 0, ry: 0 }
+): Point {
+  const { id } = finder;
+  const absFinderPosition = room.positions[id];
+
+  return sumPoints(absFinderPosition, relativePoint);
 }
 
 export function exploredMapToMaze(

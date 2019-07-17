@@ -1,6 +1,6 @@
 import { Maze, Row } from 'generate-maze-ts';
 
-import { Point } from './Assemblies';
+import { equal, Point } from './Assemblies';
 import { BoxG, ExploredMap } from './ExploredMap';
 
 export function exploredMapToStrings(exploredMap: ExploredMap): string[] {
@@ -17,6 +17,7 @@ export function exploredMapToStrings(exploredMap: ExploredMap): string[] {
 
 export function mazeToStrings(
   maze: Maze,
+  exitPoint: Point,
   positions: { [id: number]: Point } = {}
 ): string[] {
   interface BoxString {
@@ -38,7 +39,11 @@ export function mazeToStrings(
     return {
       bottom: `+${box.bottom ? '---' : '   '}+`,
       middle: `${box.left ? '|' : ' '} ${
-        finderIsHere || box.explored ? '●' : ' '
+        equal(exitPoint, { x: box.x, y: box.y })
+          ? '○'
+          : finderIsHere || box.explored
+          ? '●'
+          : ' '
       } ${box.right ? '|' : ' '}`,
       top: `+${box.top ? '---' : '   '}+`
     };

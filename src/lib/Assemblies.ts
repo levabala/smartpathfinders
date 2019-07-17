@@ -33,6 +33,12 @@ export interface Borders {
   left: number;
 }
 
+export interface Range {
+  from: number;
+  to: number;
+  step?: number;
+}
+
 export function directionToDelta(dir: Direction): Delta {
   const map: { [d in Direction]: Delta } = {
     [Direction.top]: { dx: 0, dy: -1 },
@@ -131,4 +137,77 @@ export function sumDeltas(d1: Delta, d2: Delta): Delta {
     dx: d1.dx + d2.dx,
     dy: d1.dy + d2.dy
   };
+}
+
+export function sumPoints(p1: Point | RelativePoint, p2: Point): Point;
+export function sumPoints(p1: Point, p2: Point | RelativePoint): Point;
+export function sumPoints(p1: RelativePoint, p2: RelativePoint): RelativePoint;
+
+export function sumPoints(
+  p1: Point | RelativePoint,
+  p2: Point | RelativePoint
+): Point | RelativePoint {
+  const r1 = isRelativePoint(p1);
+  const r2 = isRelativePoint(p2);
+
+  const point1 = r1 ? rp2p(p1 as RelativePoint) : (p1 as Point);
+  const point2 = r2 ? rp2p(p1 as RelativePoint) : (p2 as Point);
+
+  const res = {
+    x: point1.x + point2.x,
+    y: point1.y + point2.y
+  };
+
+  return r1 && r2 ? p2rp(res) : res;
+}
+
+export function randomPoint(
+  xRange: Range | Required<Range>,
+  yRange: Range | Required<Range>
+): Point {
+  const xr = detRange(xRange);
+  const yr = detRange(yRange);
+
+  return {
+    x: randomInRange(xr),
+    y: randomInRange(yr)
+  };
+}
+
+export function random(min: number, max: number, inc: number = 1): number {
+  return Math.floor((Math.random() * (max - min)) / inc) * inc + min;
+}
+
+export function randomInRange(range: Required<Range>): number {
+  return random(range.from, range.to, range.step);
+}
+
+export function simpleRange(to: number): Required<Range> {
+  return {
+    from: 0,
+    step: 1,
+    to
+  };
+}
+
+export function detRange({
+  from,
+  step,
+  to
+}: Range | Required<Range>): Required<Range> {
+  return {
+    from,
+    step: step === undefined ? 1 : step,
+    to
+  };
+}
+
+export function equal(
+  point1: Point | RelativePoint,
+  point2: Point | RelativePoint
+): boolean {
+  const p1 = isRelativePoint(point1) ? rp2p(point1) : point1;
+  const p2 = isRelativePoint(point2) ? rp2p(point2) : point2;
+
+  return p1.x === p2.x && p1.y === p2.y;
 }

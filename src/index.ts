@@ -3,3 +3,4 @@ export * from './lib/Room';
 export * from './lib/Finder';
 export * from './lib/Assemblies';
 export * from './lib/ExploredMap';
+export * from './lib/Simulation';

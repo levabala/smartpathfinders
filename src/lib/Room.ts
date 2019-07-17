@@ -1,6 +1,15 @@
 import { Direction, generateMaze, Maze } from 'generate-maze-ts';
 
-import { Point, pointInBorders, pointWithDelta, pointWithDirection, Result, sumDeltas } from './Assemblies';
+import {
+  Point,
+  pointInBorders,
+  pointWithDelta,
+  pointWithDirection,
+  randomPoint,
+  Result,
+  simpleRange,
+  sumDeltas,
+} from './Assemblies';
 import { appendLine, BoxG, getRelativeBorders, setBoxValue } from './ExploredMap';
 import { Finder } from './Finder';
 
@@ -8,11 +17,17 @@ export interface Room {
   maze: Maze;
   finders: { [id: number]: Finder };
   positions: { [id: number]: Point };
+  finishPoint: Point;
 }
 
 export function createRoom(
-  mazeSize: number,
+  mazeWidth: number,
+  mazeHeight: number,
   finders: Array<{ finder: Finder; position: Point }>,
+  finishPoint: Point = randomPoint(
+    simpleRange(mazeWidth),
+    simpleRange(mazeHeight)
+  ),
   seed?: string
 ): Room {
   return {
@@ -20,7 +35,8 @@ export function createRoom(
       (acc, val) => ({ ...acc, [val.finder.id]: val.finder }),
       {}
     ),
-    maze: generateMaze(mazeSize, mazeSize, undefined, seed),
+    finishPoint,
+    maze: generateMaze(mazeWidth, mazeHeight, undefined, seed),
     positions: finders.reduce(
       (acc, val) => ({ ...acc, [val.finder.id]: val.position }),
       {}
@@ -33,7 +49,7 @@ export function tryMoveFinder(
   finder: Finder,
   direction: Direction
 ): [Result, Room] {
-  const { finders, maze, positions } = room;
+  const { finders, maze, positions, finishPoint } = room;
   const { id } = finder;
   const currentPosition = room.positions[id];
   const { x, y } = currentPosition;
@@ -41,6 +57,7 @@ export function tryMoveFinder(
   const walkable = isWalkable(currentBox, direction);
 
   const newRoom: Room = {
+    finishPoint,
     maze,
     ...(walkable
       ? {
@@ -59,32 +76,6 @@ export function tryMoveFinder(
   return [walkable ? Result.Success : Result.Fault, newRoom];
 }
 
-// function getExcessiveMap(
-//   exploredMapT: ExploredMap,
-//   exploredMapOffsetT: Delta,
-//   relativePosition: RelativePoint,
-//   direction: Direction
-// ): { map: ExploredMap; offset: Delta } {
-//   const borders = getRelativeBorders(exploredMapT, exploredMapOffsetT);
-//   const needAppendLine = !pointInBorders(relativePosition, borders, false);
-
-//   const { map, offset } = needAppendLine
-//     ? appendLine(exploredMapT, direction)
-//     : { map: exploredMapT, offset: { dx: 0, dy: 0 } };
-
-//   console.log({ needAppendLine });
-//   console.log({ needAppendLine, borders, relativePosition });
-
-//   return needAppendLine
-//     ? getExcessiveMap(
-//         map,
-//         offset,
-//         p2rp(pointWithDelta(relativePosition, offset, -1)),
-//         direction
-//       )
-//     : { map, offset };
-// }
-
 function moveFinder(finder: Finder, direction: Direction): Finder {
   const { id, exploredMap, relativePosition, exploredMapOffset } = finder;
   const newRelativePosition = pointWithDirection(relativePosition, direction);
@@ -95,8 +86,6 @@ function moveFinder(finder: Finder, direction: Direction): Finder {
     ? appendLine(finder.exploredMap, direction)
     : { map: exploredMap, offset: { dx: 0, dy: 0 } };
 
-  console.log({ needAppendLine });
-
   const newOffset = sumDeltas(exploredMapOffset, offset);
   const pointsToMark = [
     newRelativePosition
@@ -106,7 +95,6 @@ function moveFinder(finder: Finder, direction: Direction): Finder {
     // pointWithDelta(newRelativePosition, { dx: 0, dy: -1 })
   ].map(p => pointWithDelta(p, newOffset, -1));
 
-  console.log('new offset:', newOffset);
   return {
     exploredMap: pointsToMark.reduce(
       (newMap, point) => setBoxValue(newMap, point, true),
