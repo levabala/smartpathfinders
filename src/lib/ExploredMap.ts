@@ -4,14 +4,17 @@ import {
   arr2dHeight,
   arr2dWidth,
   Borders,
+  dd2rp,
   Delta,
   isRelativePoint,
   Point,
   pointInBorders,
   RelativePoint,
+  Result,
   rp2p,
   Sizable,
   sumPoints,
+  TwoD,
 } from './Assemblies';
 import { Finder } from './Finder';
 import { Room } from './Room';
@@ -96,25 +99,46 @@ export function getRelativeBorders(
 
 export function toRelative(
   exploredMap: ExploredMap,
-  anchor: RelativePoint
+  anchor: TwoD
 ): ExploredMapRelative {
   const size: Sizable = {
     height: arr2dHeight(exploredMap),
     width: arr2dWidth(exploredMap)
   };
+  const { rx, ry } = dd2rp(anchor);
+
   return exploredMap.reduce(
     (relativeMap, row, y) => ({
       ...relativeMap,
-      [y - anchor.ry]: row.reduce(
+      [y - ry]: row.reduce(
         (relativeRow, val, x) => ({
           ...relativeRow,
-          [x - anchor.rx]: val
+          [x - rx]: val
         }),
         {}
       )
     }),
     size
   ) as ExploredMapRelative;
+}
+
+export function getExploredMazeBoxByFinder(
+  finder: Finder,
+  relativePoint: RelativePoint,
+  room: Room
+): [Result, Box?] {
+  const relativeMap = toRelative(finder.exploredMap, finder.exploredMapOffset);
+  const explored =
+    relativePoint.ry in relativeMap &&
+    relativePoint.rx in relativeMap[relativePoint.ry] &&
+    relativeMap[relativePoint.ry][relativePoint.rx];
+
+  return explored
+    ? [
+        Result.Success,
+        getMazeBoxByFinder(finder, finder.relativePosition, room)
+      ]
+    : [Result.Fault];
 }
 
 export function getMazeBoxByFinder(

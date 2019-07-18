@@ -15,6 +15,8 @@ export interface Delta {
   dy: number;
 }
 
+export type TwoD = Point | RelativePoint | Delta;
+
 export enum Result {
   Success = 'Success',
   Fault = 'Fault',
@@ -37,6 +39,18 @@ export interface Range {
   from: number;
   to: number;
   step?: number;
+}
+
+export function dd2p(dd: TwoD): Point {
+  return isPoint(dd) ? dd : isRelativePoint(dd) ? rp2p(dd) : d2p(dd);
+}
+
+export function dd2rp(dd: TwoD): RelativePoint {
+  return isPoint(dd) ? p2rp(dd) : isDelta(dd) ? d2rp(dd) : dd;
+}
+
+export function dd2d(dd: TwoD): Delta {
+  return isPoint(dd) ? p2d(dd) : isRelativePoint(dd) ? rp2d(dd) : dd;
 }
 
 export function directionToDelta(dir: Direction): Delta {
@@ -82,12 +96,20 @@ export function rp2p({ rx, ry }: RelativePoint): Point {
   return { x: rx, y: ry };
 }
 
+export function rp2d({ rx, ry }: RelativePoint): Delta {
+  return { dx: rx, dy: ry };
+}
+
 export function p2rp({ x, y }: Point): RelativePoint {
   return { rx: x, ry: y };
 }
 
 export function d2p({ dx, dy }: Delta): Point {
   return { x: dx, y: dy };
+}
+
+export function d2rp({ dx, dy }: Delta): RelativePoint {
+  return { rx: dx, ry: dy };
 }
 
 export function p2d({ x, y }: Point): Delta {
@@ -98,13 +120,19 @@ export function d2d({ dx, dy }: Delta, multiplier: number): Delta {
   return { dx: dx * multiplier, dy: dy * multiplier };
 }
 
-export function isRelativePoint(
-  point: Point | RelativePoint
-): point is RelativePoint {
+export function isPoint(dd: TwoD): dd is Point {
+  return (dd as Point).x !== undefined && (dd as Point).y !== undefined;
+}
+
+export function isRelativePoint(dd: TwoD): dd is RelativePoint {
   return (
-    (point as RelativePoint).rx !== undefined &&
-    (point as RelativePoint).ry !== undefined
+    (dd as RelativePoint).rx !== undefined &&
+    (dd as RelativePoint).ry !== undefined
   );
+}
+
+export function isDelta(dd: TwoD): dd is Delta {
+  return (dd as Delta).dx !== undefined && (dd as Delta).dy !== undefined;
 }
 
 export function arr2dWidth(arr: any[][]): number {
